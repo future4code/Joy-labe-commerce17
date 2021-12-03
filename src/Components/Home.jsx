@@ -16,6 +16,7 @@ const Produtos = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   grid-row-gap: 16px;
   padding: 16px;
+
 `;
 
 const Section = styled.div`
@@ -28,7 +29,11 @@ const Section = styled.div`
 const Filter = styled.div`
   border: 1px solid black;
   padding: 8px;
-`
+  
+`;
+
+
+
 
 class Home extends React.Component {
   state = {
