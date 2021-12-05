@@ -2,6 +2,7 @@ import React from "react";
 import Cards from "./Cards";
 import styled from "styled-components";
 import Filtro from "./Filtro";
+import Carrinho from './Carrinho';
 
 const Body = styled.div`
   display: grid;
@@ -32,17 +33,49 @@ const Filter = styled.div`
   
 `;
 
+const products = [
+  {
+    id: 1,
+    name: "Sputnik 1",
+    value: 10000.0,
+    imageUrl: "https://picsum.photos/200/200?random=1",
+    
+  },
 
+  {
+    id: 2,
+    name: "Apollo 11",
+    value: 20000.0,
+    imageUrl: "https://picsum.photos/200/200?random=2",
+    
+  },
+
+  {
+    id: 3,
+    name: "Crew Dragon",
+    value: 30000.0,
+    imageUrl: "https://picsum.photos/200/200?random=3",
+    
+  },
+
+  {
+    id: 4,
+    name: "Mercury-Atlas 6",
+    value: 40000.0,
+    imageUrl: "https://picsum.photos/200/200?random=4",
+  },
+]
 
 
 class Home extends React.Component {
   state = {
-    produtos: [
+    productsInCart: [
       {
         id: 1,
         name: "Sputnik 1",
         value: 10000.0,
         imageUrl: "https://picsum.photos/200/200?random=1",
+        quantity: 2
       },
 
       {
@@ -50,6 +83,7 @@ class Home extends React.Component {
         name: "Apollo 11",
         value: 20000.0,
         imageUrl: "https://picsum.photos/200/200?random=2",
+        quantity: 2
       },
 
       {
@@ -57,6 +91,7 @@ class Home extends React.Component {
         name: "Crew Dragon",
         value: 30000.0,
         imageUrl: "https://picsum.photos/200/200?random=3",
+        quantity: 2
       },
 
       {
@@ -64,6 +99,7 @@ class Home extends React.Component {
         name: "Mercury-Atlas 6",
         value: 40000.0,
         imageUrl: "https://picsum.photos/200/200?random=4",
+        quantity: 2
       },
     ],
 
@@ -71,6 +107,7 @@ class Home extends React.Component {
     query: "",
     minPrice: "",
     maxPrice: "",
+    
   };
 
   onChangeFilter = (event) => {
@@ -104,8 +141,48 @@ class Home extends React.Component {
     });
   };
 
+  onAddProductToCart = (productId) => {
+    const productInCart = this.state.productsInCart.find(product => productId === product.id)
+    console.log("Clicou")
+
+    if(productInCart) {
+      const newProductsInCart = this.state.productsInCart.map(product => {
+        if(productId === product.id) {
+          return {
+            ...product,
+            quantity: product.quantity + 1
+          }
+        }
+
+        return product
+      })
+
+      this.setState({productsInCart: newProductsInCart})
+    } else {
+      const productToAdd = products.find(product => productId === product.id)
+
+      const newProductsInCart = [...this.state.productsInCart, {...productToAdd, quantity: 1}]
+
+      this.setState({productsInCart: newProductsInCart})
+    }
+  }
+
+  onRemoveProductFromCart = (productId) => {
+    const newProductsInCart = this.state.productsInCart.map((product) => {
+      if(product.id === productId) {
+        return {
+          ...product,
+          quantity: product.quantity - 1
+        }
+      }
+      return product
+    }).filter((product) => product.quantity > 0)
+
+    this.setState({productsInCart: newProductsInCart})
+  }
+
   render() {
-    const listaDeProdutos = this.state.produtos
+    const listaDeProdutos = products
       .sort(this.ordenaProdutos(this.state.filtro))
       .filter((produto) => {
         return produto.name
@@ -123,9 +200,10 @@ class Home extends React.Component {
         );
       })
       .map((produto) => {
-        return <Cards key={produto.id} produtos={produto} />;
+        return <Cards onAddProductToCart={this.onAddProductToCart} key={produto.id} products={produto} />;
       });
 
+      
     return (
       <Body>
 
@@ -170,8 +248,12 @@ class Home extends React.Component {
               </select>
             </label>
           </Section>
-          <Produtos>{listaDeProdutos}</Produtos>
+          <Produtos onAddProductToCart={this.props.onAddProductToCart}>{listaDeProdutos}</Produtos>
         </div>
+        <Carrinho
+          productsInCart={this.state.productsInCart}
+          onRemoveProductFromCart={this.onRemoveProductFromCart}
+        />
       </Body>
     );
   }

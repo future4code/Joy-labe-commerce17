@@ -1,5 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
+import Home from './Home'
 
 const CardProduto = styled.div`
 display: grid;
@@ -12,8 +13,9 @@ box-shadow: rgb(163 163 163) 3px 3px 8px;
 margin: 5px;
 `;
 const ImgProduto = styled.img`
-width: 100%;
-height: 200px;
+  width: 100%;
+  height: 200px;
+  border-radius: 5px 5px 0px 0px;
 `;
 const InfoProdutos = styled.p`
     font-size: 20px;
@@ -41,15 +43,18 @@ cursor:pointer;
 `;
 
 class Cards extends React.Component {
+          
+    
     render() {
+        const products = this.props.products
         return (
             <div>
                 <CardProduto>
-                    <ImgProduto src={this.props.produtos.imageUrl} alt="Imagem produto" /> 
-                        <InfoProdutos> {this.props.produtos.name} </InfoProdutos>
-                        <InfoProdutos> R$ {this.props.produtos.value} ,00 </InfoProdutos>
-                        <BotaoAdd> Adicionar </BotaoAdd>
-                </CardProduto>
+                    <ImgProduto src={this.props.products.imageUrl} alt="Imagem produto" /> 
+                        <InfoProdutos> {this.props.products.name} </InfoProdutos>
+                        <InfoProdutos> R$ {this.props.products.value} ,00 </InfoProdutos>
+                        <BotaoAdd onClick={() => this.props.onAddProductToCart(products.id)}> Adicionar </BotaoAdd>
+                </CardProduto >
             </div>
         )
     }
