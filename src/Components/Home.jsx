@@ -33,7 +33,7 @@ const Filter = styled.div`
   
 `;
 
-const produtos = [
+const products = [
   {
     id: 1,
     name: "Sputnik 1",
@@ -159,7 +159,7 @@ class Home extends React.Component {
 
       this.setState({productsInCart: newProductsInCart})
     } else {
-      const productToAdd = produtos.find(product => productId === product.id)
+      const productToAdd = products.find(product => productId === product.id)
 
       const newProductsInCart = [...this.state.productsInCart, {...productToAdd, quantity: 1}]
 
@@ -182,7 +182,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const listaDeProdutos = produtos
+    const listaDeProdutos = products
       .sort(this.ordenaProdutos(this.state.filtro))
       .filter((produto) => {
         return produto.name
@@ -200,7 +200,7 @@ class Home extends React.Component {
         );
       })
       .map((produto) => {
-        return <Cards onAddProductToCart={this.onAddProductToCart} key={produto.id} produtos={produto} />;
+        return <Cards onAddProductToCart={this.onAddProductToCart} key={produto.id} products={produto} />;
       });
 
       
