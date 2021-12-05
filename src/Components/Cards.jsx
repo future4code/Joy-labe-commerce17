@@ -1,5 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
+import Home from './Home'
 
 const CardProduto = styled.div`
 display: grid;
@@ -41,15 +42,18 @@ cursor:pointer;
 `;
 
 class Cards extends React.Component {
+          
+    
     render() {
+        const produtos = this.props.produtos
         return (
             <div>
                 <CardProduto>
                     <ImgProduto src={this.props.produtos.imageUrl} alt="Imagem produto" /> 
                         <InfoProdutos> {this.props.produtos.name} </InfoProdutos>
                         <InfoProdutos> R$ {this.props.produtos.value} ,00 </InfoProdutos>
-                        <BotaoAdd> Adicionar </BotaoAdd>
-                </CardProduto>
+                        <BotaoAdd onClick={() => this.props.onAddProductToCart(produtos.id)}> Adicionar </BotaoAdd>
+                </CardProduto >
             </div>
         )
     }
